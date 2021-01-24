@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #'initialization widgets' }
-TBMBlogTest >> setup [
+TBMBlogTest >> setUp [
 	
 	blog := TBMBlog current.
 	blog removeAllPost.
@@ -32,4 +32,17 @@ TBMBlogTest >> testAddBlogPost [
 
 	blog writeBlogPost: post.
 	self assert: blog size equals: 2
+]
+
+{ #category : #tests }
+TBMBlogTest >> testRemoveAllBlogPosts [
+
+	blog removeAllPost.
+	self assert: blog size equals: 0
+]
+
+{ #category : #tests }
+TBMBlogTest >> testSize [ 
+
+	self assert: blog size equals: 1
 ]
