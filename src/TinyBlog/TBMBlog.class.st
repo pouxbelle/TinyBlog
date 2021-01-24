@@ -34,3 +34,22 @@ TBMBlog >> initialize [
 	super initialize.
 	posts := OrderedCollection new.
 ]
+
+{ #category : #removing }
+TBMBlog >> removeAllPost [
+
+	posts := OrderedCollection new
+]
+
+{ #category : #writing }
+TBMBlog >> size [ 
+
+	^ posts size
+]
+
+{ #category : #writing }
+TBMBlog >> writeBlogPost: aPost [
+
+	"Add the blog post to the list of posts"
+	posts add: aPost
+]
