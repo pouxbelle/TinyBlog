@@ -5,9 +5,6 @@ Class {
 		'posts',
 		'uniqueInstance'
 	],
-	#classInstVars : [
-		'uniqueInstance'
-	],
 	#category : #TinyBlog
 }
 
@@ -24,21 +21,36 @@ TBMBlog class >> createDemoPosts [
 		writeBlogPost: ((TBMPost title: 'Working with Pharo on theRaspberry Pi' text: 'Hardware is getting cheaper and many newsmall devices like the famous Raspberry Pi provide newcomputation power that was one once only available on regulardesktop computers.' category: 'Pharo') visible: true)
 ]
 
-{ #category : #initialization }
+{ #category : #testing }
 TBMBlog class >> current [ 
+	^ self selectAll 
+		ifNotEmpty: [ :x | x anyOne ]
+		ifEmpty: [  self new save ]
 
-	^ uniqueInstance ifNil: [ uniqueInstance := self new ]
 ]
 
-{ #category : #initialization }
+{ #category : #testing }
 TBMBlog class >> initialize [ 
+	self reset 
 
-	self reset
+
 ]
 
-{ #category : #initialization }
+{ #category : #testing }
+TBMBlog class >> initializeVoyageOnMemoryDB [
+	VOMemoryRepository new enableSingleton 
+]
+
+{ #category : #testing }
+TBMBlog class >> isVoyageRoot [ 
+	"Indicates that instances of this class are top level documents in noSQL databases"
+	^ true
+]
+
+{ #category : #testing }
 TBMBlog class >> reset [ 
-	uniqueInstance := nil
+	self initializeVoyageOnMemoryDB
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -81,7 +93,8 @@ TBMBlog >> initialize [
 { #category : #removing }
 TBMBlog >> removeAllPost [
 
-	posts := OrderedCollection new
+	posts := OrderedCollection new.
+	self save.
 ]
 
 { #category : #writing }
@@ -92,7 +105,7 @@ TBMBlog >> size [
 
 { #category : #writing }
 TBMBlog >> writeBlogPost: aPost [
-
-	"Add the blog post to the list of posts"
-	posts add: aPost
+	"Write the blog post in database"
+	self allBlogPosts add: aPost.
+	self save
 ]
