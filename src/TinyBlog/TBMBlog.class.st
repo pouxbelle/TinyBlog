@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'posts',
-		'uniqueInstance'
+		'uniqueInstance',
+		'title'
 	],
 	#category : #TinyBlog
 }
@@ -88,6 +89,7 @@ TBMBlog >> initialize [
 
 	super initialize.
 	posts := OrderedCollection new.
+	title := 'Title by default of TinyBlog'
 ]
 
 { #category : #removing }
@@ -101,6 +103,16 @@ TBMBlog >> removeAllPost [
 TBMBlog >> size [ 
 
 	^ posts size
+]
+
+{ #category : #accessing }
+TBMBlog >> title [ 
+	^ title
+]
+
+{ #category : #accessing }
+TBMBlog >> title: aWord [ 
+	title := aWord
 ]
 
 { #category : #writing }
