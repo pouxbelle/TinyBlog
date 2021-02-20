@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'posts',
 		'uniqueInstance',
-		'title'
+		'title',
+		'adminUser'
 	],
 	#category : #TinyBlog
 }
@@ -30,6 +31,16 @@ TBMBlog class >> current [
 
 ]
 
+{ #category : #'as yet unclassified' }
+TBMBlog class >> defaultAdminLogin [
+	^ 'admin' 
+]
+
+{ #category : #'as yet unclassified' }
+TBMBlog class >> defaultAdminPassword [
+	^ 'topsecret' 
+]
+
 { #category : #testing }
 TBMBlog class >> initialize [ 
 	self reset 
@@ -52,6 +63,11 @@ TBMBlog class >> isVoyageRoot [
 TBMBlog class >> reset [ 
 	self initializeVoyageOnMemoryDB
 
+]
+
+{ #category : #'as yet unclassified' }
+TBMBlog >> administrator [
+	^ adminUser 
 ]
 
 { #category : #'as yet unclassified' }
@@ -84,12 +100,20 @@ TBMBlog >> allVisibleBlogPostsFromCategory: aCategory [
 	^ posts select: [  :p | p category = aCategory  and: [ p isVisible  ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+TBMBlog >> createAdministrator [
+	^ TBMAdminstrator 
+		login: self class defaultAdminLogin 
+		password: self class defaultAdminPassword 
+]
+
 { #category : #initialization }
 TBMBlog >> initialize [ 
 
 	super initialize.
 	posts := OrderedCollection new.
-	title := 'Title by default of TinyBlog'
+	title := 'Title by default of TinyBlog'.
+	adminUser := self createAdministrator 
 ]
 
 { #category : #removing }

@@ -2,7 +2,8 @@ Class {
 	#name : #TBMPostsListComponent,
 	#superclass : #TBMScreenComponent,
 	#instVars : [
-		'currentCategory'
+		'currentCategory',
+		'showLoginError'
 	],
 	#category : #'TinyBlog-Components'
 }
@@ -33,6 +34,26 @@ TBMPostsListComponent >> currentCategory [
 { #category : #accessing }
 TBMPostsListComponent >> currentCategory: anObject [
 	currentCategory := anObject 
+]
+
+{ #category : #'as yet unclassified' }
+TBMPostsListComponent >> goToAdministrationView [
+	self call: TBMAdminComponent new 
+]
+
+{ #category : #'as yet unclassified' }
+TBMPostsListComponent >> hasLoginError [
+	^ showLoginError ifNil: [ false ]
+]
+
+{ #category : #'as yet unclassified' }
+TBMPostsListComponent >> loginErrorMessage [
+	^ 'Pas de bol ! Cela ne passe pas comme cela !'
+]
+
+{ #category : #'as yet unclassified' }
+TBMPostsListComponent >> loginErrorOccured [
+	showLoginError := true
 ]
 
 { #category : #'as yet unclassified' }
@@ -68,10 +89,33 @@ TBMPostsListComponent >> renderContentOn: html [
 ]
 
 { #category : #rendering }
+TBMPostsListComponent >> renderLoginErrorMessageIfAnyOn: html [
+	self hasLoginError ifTrue: [ 
+		showLoginError := false.
+		html tbsAlert 
+			beDanger ;
+			with: self loginErrorMessage 
+	 ]
+]
+
+{ #category : #rendering }
 TBMPostsListComponent >> renderPostColumnOn: html [ 
 		html tbsColumn
 			extraSmallSize: 12;
 			smallSize: 10;
 			mediumSize: 8;
-			with: [ self basicRenderPostsOn: html ]
+			with: [ 
+				self renderLoginErrorMessageIfAnyOn: html.
+				self basicRenderPostsOn: html ]
+]
+
+{ #category : #'as yet unclassified' }
+TBMPostsListComponent >> tryConnectionWithLogin: login andPassword: password [
+	(login = self blog administrator login and: [ 
+		(MD5 hashMessage: password) = self blog administrator password 
+	 ])
+		ifTrue: [ 
+			self session currentAdmin: self blog administrator. 
+			self goToAdministrationView ]
+		ifFalse: [ self loginErrorOccured ]
 ]

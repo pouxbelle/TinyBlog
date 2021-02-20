@@ -20,7 +20,7 @@ TBMScreenComponent >> children [
 
 { #category : #initialization }
 TBMScreenComponent >> createHeaderComponent [
-	^ TBMHeaderrComponent new 
+	^ TBMHeaderrComponent from: self
 ]
 
 { #category : #initialization }
