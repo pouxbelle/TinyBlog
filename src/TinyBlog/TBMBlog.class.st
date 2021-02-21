@@ -123,6 +123,13 @@ TBMBlog >> removeAllPost [
 	self save.
 ]
 
+{ #category : #removing }
+TBMBlog >> removeBlogPost: aPost [
+
+	posts remove: aPost ifAbsent: [ ].
+	self save.
+]
+
 { #category : #writing }
 TBMBlog >> size [ 
 
